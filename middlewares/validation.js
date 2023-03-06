@@ -25,6 +25,19 @@ const contactValidate = (req, res, next) => {
   }
   next();
 };
+
+const statusContactValidate = (req, res, next) => {
+  const statusContactSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
+  const validateResult = statusContactSchema.validate(req.body);
+  if (validateResult.error) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  next();
+};
+
 module.exports = {
   contactValidate,
+  statusContactValidate,
 };

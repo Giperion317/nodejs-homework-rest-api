@@ -1,54 +1,54 @@
-const tryCatchWrapper = require("../helpers/tryCatchWraper");
 const {
-  listContacts,
+  getContacts,
   getContactById,
   addContact,
   updateContact,
   removeContact,
-} = require("../models/contacts");
+  updateStatusContact,
+} = require("../servises/contactService");
 
-const controlerGetContact = async (req, res) => {
-  const contacts = await tryCatchWrapper(listContacts());
+const getContactsController = async (req, res) => {
+  const contacts = await getContacts();
   return res.status(200).json({ contacts });
 };
 
-const controlerContactById = async (req, res) => {
-  const contactById = await tryCatchWrapper(
-    getContactById(req.params.contactId)
-  );
-  return contactById
-    ? res.status(200).json({ contactById })
-    : res.status(404).json({ message: "Not found" });
+const getContactByIdController = async (req, res) => {
+  const { contactId } = req.params;
+  const contactById = await getContactById(contactId);
+  return res.status(200).json({ contactById });
 };
 
-const controleraddContact = async (req, res) => {
-  const newContact = await tryCatchWrapper(addContact(req.body));
-
+const addContactController = async (req, res) => {
+  const { name, email, phone } = req.body;
+  const newContact = await addContact({ name, email, phone });
   return res.status(201).json({ newContact });
 };
 
-const controlerUpdateContact = async (req, res) => {
-  changedContact = await tryCatchWrapper(
-    updateContact(req.params.contactId, req.body)
-  );
-  return changedContact
-    ? res.status(200).json({ changedContact })
-    : res.status(404).json({ message: "Not found" });
+const updateContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  const changedContact = await updateContact(contactId, { name, email, phone });
+  return res.status(200).json({ changedContact });
 };
 
-const controlerRemoveContact = async (req, res) => {
-  const removedContact = await tryCatchWrapper(
-    removeContact(req.params.contactId)
-  );
-  return removedContact
-    ? res.status(200).json({ message: "contact deleted" })
-    : res.status(404).json({ message: "Not found" });
+const removeContactController = async (req, res) => {
+  const { contactId } = req.params;
+  await removeContact(contactId);
+  res.status(200).json({ message: "Contact removed" });
+};
+
+const updateStatusContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+  const statusContact = await updateStatusContact(contactId, { favorite });
+  return res.status(200).json({ statusContact });
 };
 
 module.exports = {
-  controlerGetContact,
-  controlerContactById,
-  controleraddContact,
-  controlerUpdateContact,
-  controlerRemoveContact,
+  getContactsController,
+  getContactByIdController,
+  addContactController,
+  updateContactController,
+  removeContactController,
+  updateStatusContactController,
 };
