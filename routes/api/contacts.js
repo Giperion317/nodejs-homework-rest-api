@@ -15,20 +15,20 @@ const {
   statusContactValidate,
 } = require("../../middlewares/validation");
 
-const { asyncWrapper } = require("../../helpers/apiHelpers");
+const auth = require("../../middlewares/auth");
 
-router.get("/contacts", asyncWrapper(getContactsController));
+router.get("/", auth, getContactsController);
 
-router.get("/contacts/:contactId", getContactByIdController);
+router.get("/:contactId", getContactByIdController);
 
-router.post("/contacts", contactValidate, addContactController);
+router.post("/", contactValidate, addContactController);
 
-router.put("/contacts/:contactId", contactValidate, updateContactController);
+router.put("/:contactId", contactValidate, updateContactController);
 
-router.delete("/contacts/:contactId", removeContactController);
+router.delete("/:contactId", removeContactController);
 
 router.patch(
-  "/contacts/:contactId/favorite",
+  "/:contactId/favorite",
   statusContactValidate,
   updateStatusContactController
 );

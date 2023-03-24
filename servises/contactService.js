@@ -1,13 +1,15 @@
-const { Contacts } = require("../db/contactsModel");
+const { Contacts } = require("../models/contactsModel");
 
-const getContacts = async () => {
-  return await Contacts.find({});
+const getContacts = async (contactId, user) => {
+  return await Contacts.find({ _id: contactId, owner: user });
 };
 
 const getContactById = async (id) => {
   const contactById = await Contacts.findById(id);
   if (!contactById) {
-    return res.status(404).json({ message: "Not found" });
+    return res.status(404).json({
+      message: "Not found",
+    });
   }
   return contactById;
 };
