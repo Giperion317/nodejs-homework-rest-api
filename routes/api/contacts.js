@@ -8,7 +8,7 @@ const {
   updateContactController,
   removeContactController,
   updateStatusContactController,
-} = require("../../controllers/contactController");
+} = require("../../controllers/contacts");
 
 const {
   contactValidate,
@@ -19,16 +19,17 @@ const auth = require("../../middlewares/auth");
 
 router.get("/", auth, getContactsController);
 
-router.get("/:contactId", getContactByIdController);
+router.get("/:contactId", auth, getContactByIdController);
 
-router.post("/", contactValidate, addContactController);
+router.post("/", auth, contactValidate, addContactController);
 
-router.put("/:contactId", contactValidate, updateContactController);
+router.put("/:contactId", auth, contactValidate, updateContactController);
 
-router.delete("/:contactId", removeContactController);
+router.delete("/:contactId", auth, removeContactController);
 
 router.patch(
   "/:contactId/favorite",
+  auth,
   statusContactValidate,
   updateStatusContactController
 );
