@@ -53,8 +53,28 @@ const authValidate = (req, res, next) => {
   next();
 };
 
+const verifyEmailValidate = (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400);
+    throw new Error("Missing required field email!");
+  }
+  const validateShema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+  const validateResult = validateShema.validate(req.body);
+
+  if (validateResult.error) {
+    return res
+      .status(400)
+      .json({ message: validateResult.error.details[0].message });
+  }
+  next();
+};
+
 module.exports = {
   contactValidate,
   statusContactValidate,
   authValidate,
+  verifyEmailValidate,
 };

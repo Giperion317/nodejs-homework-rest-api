@@ -22,6 +22,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    default: "",
+  },
 });
 
 const Users = mongoose.model("users", userSchema);
