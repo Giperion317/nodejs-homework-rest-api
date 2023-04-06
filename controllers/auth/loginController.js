@@ -6,6 +6,11 @@ const loginController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await loginService(email, password);
+  if (!user.verify) {
+    res.status(400);
+    throw new Error("User not verified!");
+  }
+
   const token = generateToken({
     id: user._id,
     email: user.email,

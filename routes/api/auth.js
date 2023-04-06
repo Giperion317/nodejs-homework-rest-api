@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { authValidate } = require("../../middlewares/validation");
+const {
+  authValidate,
+  verifyEmailValidate,
+} = require("../../middlewares/validation");
 const auth = require("../../middlewares/auth");
 const upload = require("../../middlewares/upload");
 const {
@@ -11,9 +14,13 @@ const {
   currentUserControler,
   subscriptionController,
   avatarUploadController,
+  verifyController,
+  resendEmailController,
 } = require("../../controllers/auth");
 
 router.post("/register", authValidate, registerController);
+router.get("verify/:verificationToken", verifyController);
+router.post("/verify", verifyEmailValidate, resendEmailController);
 router.post("/login", loginController);
 router.get("/logout", auth, logoutController);
 router.get("/current", auth, currentUserControler);

@@ -1,12 +1,18 @@
 const { Users } = require("../../models/userModel");
 const bcrypt = require("bcryptjs");
 
-const reristerServise = async (email, password, avatarURL) => {
+const reristerServise = async (
+  email,
+  password,
+  avatarURL,
+  verificationToken
+) => {
   const hashPassword = bcrypt.hashSync(password, 10);
   const newUser = await Users.create({
     email,
     password: hashPassword,
     avatarURL,
+    verificationToken,
   });
   if (!newUser) {
     res.status(400);
